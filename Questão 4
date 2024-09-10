@@ -1,0 +1,72 @@
+#include <stdio.h>
+#include <stdbool.h>
+
+#define MAX_NUM 100
+#define NUM_PRIMOS 25
+
+bool isPrimo(int num) {
+    if (num <= 1) return false;
+    if (num <= 3) return true;
+    if (num % 2 == 0 || num % 3 == 0) return false;
+    for (int i = 5; i * i <= num; i += 6) {
+        if (num % i == 0 || num % (i + 2) == 0) return false;
+    }
+    return true;
+}
+
+void gerarPrimos(int primos[], int *tamanho) {
+    *tamanho = 0;
+    for (int i = 2; i <= MAX_NUM; i++) {
+        if (isPrimo(i)) {
+            primos[*tamanho] = i;
+            (*tamanho)++;
+        }
+    }
+}
+
+int buscaBinaria(int array[], int tamanho, int chave, int *comparacoes) {
+    int esquerda = 0, direita = tamanho - 1;
+    *comparacoes = 0;
+
+    while (esquerda <= direita) {
+        (*comparacoes)++;
+        int meio = esquerda + (direita - esquerda) / 2;
+
+        if (array[meio] == chave) {
+            return meio;
+        }
+        if (array[meio] < chave) {
+            esquerda = meio + 1;
+        } else {
+            direita = meio - 1;
+        }
+    }
+    return -1;
+}
+
+int main() {
+    int primos[NUM_PRIMOS];
+    int tamanho, numero, posicao, comparacoes;
+
+    gerarPrimos(primos, &tamanho);
+
+    printf("Números primos entre 1 e 100:\n");
+    for (int i = 0; i < tamanho; i++) {
+        printf("%d ", primos[i]);
+    }
+    printf("\n");
+
+    printf("Digite um número de 1 a 100: ");
+    scanf("%d", &numero);
+
+    posicao = buscaBinaria(primos, tamanho, numero, &comparacoes);
+
+    if (posicao != -1) {
+        printf("Número %d é primo e está na posição %d da lista.\n", numero, posicao);
+    } else {
+        printf("Número %d não é primo.\n", numero);
+    }
+    printf("Número de comparações: %d\n", comparacoes);
+
+    return 0;
+}
