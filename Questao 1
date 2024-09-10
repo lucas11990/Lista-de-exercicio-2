@@ -1,0 +1,82 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <ctime>
+#include <cstdlib>
+
+std::string escolherPalavra() {
+    std::vector<std::string> palavras = {"python", "programacao", "desenvolvimento", "computador", "inteligencia"};
+    srand(time(0)); // Inicializa o gerador de números aleatórios
+    int indice = rand() % palavras.size();
+    return palavras[indice];
+}
+
+std::string exibirForca(const std::string& palavra, const std::vector<bool>& letrasAdvinhadas) {
+    std::string resultado;
+    for (size_t i = 0; i < palavra.length(); ++i) {
+        if (letrasAdvinhadas[i]) {
+            resultado += palavra[i];
+        } else {
+            resultado += '_';
+        }
+        resultado += ' ';
+    }
+    return resultado;
+}
+
+int main() {
+    std::string palavra = escolherPalavra();
+    std::vector<bool> letrasAdvinhadas(palavra.length(), false);
+    int tentativasRestantes = 6;
+    bool venceu = false;
+
+    std::cout << "Bem-vindo ao jogo da Forca!" << std::endl;
+
+    while (tentativasRestantes > 0) {
+        std::cout << "\n" << exibirForca(palavra, letrasAdvinhadas) << std::endl;
+        std::cout << "Tentativas restantes: " << tentativasRestantes << std::endl;
+
+        char tentativa;
+        std::cout << "Adivinhe uma letra: ";
+        std::cin >> tentativa;
+
+        if (!isalpha(tentativa)) {
+            std::cout << "Por favor, insira uma única letra." << std::endl;
+            continue;
+        }
+
+        tentativa = tolower(tentativa);
+        bool acertou = false;
+
+        for (size_t i = 0; i < palavra.length(); ++i) {
+            if (palavra[i] == tentativa) {
+                letrasAdvinhadas[i] = true;
+                acertou = true;
+            }
+        }
+
+        if (!acertou) {
+            --tentativasRestantes;
+            std::cout << "Letra errada! A letra '" << tentativa << "' não está na palavra." << std::endl;
+        }
+        venceu = true;
+        for (size_t i = 0; i < palavra.length(); ++i) {
+            if (!letrasAdvinhadas[i]) {
+                venceu = false;
+                break;
+            }
+        }
+
+        if (venceu) {
+            std::cout << "Parabéns! Você adivinhou a palavra: " << palavra << std::endl;
+            break;
+        }
+    }
+
+    if (!venceu) {
+        std::cout << "Você perdeu! A palavra era: " << palavra << std::endl;
+    }
+
+    return 0;
+}
+
