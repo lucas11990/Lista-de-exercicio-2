@@ -1,0 +1,31 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+#define NUM_CRIANCAS 50
+#define NUM_NOTAS 5
+
+void contarNotas(int notas[], int contagem[]) {
+    for (int i = 0; i < NUM_CRIANCAS; i++) {
+        contagem[notas[i] - 1]++;
+    }
+}
+
+int main() {
+    int notas[NUM_CRIANCAS];
+    int contagem[NUM_NOTAS] = {0}; // Inicializa o array de contagem com 0s
+
+    srand(time(NULL));
+
+    for (int i = 0; i < NUM_CRIANCAS; i++) {
+        notas[i] = rand() % NUM_NOTAS + 1;
+    }
+
+    contarNotas(notas, contagem);
+
+    for (int i = 0; i < NUM_NOTAS; i++) {
+        printf("Nota %d: %d vez(es)\n", i + 1, contagem[i]);
+    }
+
+    return 0;
+}
